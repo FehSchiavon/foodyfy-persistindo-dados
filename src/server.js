@@ -1,10 +1,15 @@
 const express = require('express')
 const nunjucks = require('nunjucks')
+const routes = require('./routes')
+const methodOverride = require('method-override')
 
 const server = express()
-const recipes = require("./data")
+const recipes = require("../dataOld")
 
+server.use(express.urlencoded({ extended: true }))
 server.use(express.static('public'))
+server.use(methodOverride('_metrod'))
+server.use(routes)
 
 server.set("view engine", "njk")
 
@@ -14,41 +19,6 @@ nunjucks.configure("views", {
     noCache: true
 })
 
-server.get("/", function(req, res) {
-    return res.render('index', { recipes })
-})
-
-server.get("/about", function (req, res) {
-    return res.render('about')
-})
-
-server.get("/recipes", function (req, res) {
-    return res.render('recipes', { recipes })
-})
-
-server.get("/recipes/:index", function (req, res) {
-    const recipeIndex = req.params.index
-    // console.log(recipeIndex)
-    
-    const recipe = recipes[recipeIndex]
-    // console.log(recipe)
-
-    // if (!recipes[recipeIndex]) {
-    //     return res.render('not-found')
-    // }
-    
-    return res.render("recipesDescription", { item: recipe })
-})
-
-server.use(function(req, res) {
-    return res.status(404).render("not-found");
-})
-
-// Assim de usa Params 
-// server.get("/recipes/:id", function (req, res) {
-//     res.send('Criando index' + req.params.id)
-// })
-
-server.listen(3000, function() {
-    console.log("server is running - Port:3000")
+server.listen(7777, function() {
+    console.log("server is running - Port:7777")
 })
