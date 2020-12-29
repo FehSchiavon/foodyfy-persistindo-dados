@@ -17,40 +17,12 @@ routes.put('/recipes', recipes.put)
 routes.delete('/recipes', recipes.delete)
 
 // CHEFS
+routes.get('/chefs', chefs.index)
+routes.get('/chefs/create', chefs.create)
+routes.get('/chefs/:id', chefs.show)
+routes.get('/chefs/:id/edit', chefs.edit)
+routes.post('/chefs', chefs.post)
+routes.put('/chefs', chefs.put)
+routes.delete('/chefs', chefs.delete)
 
-
-
-server.get("/", function(req, res) {
-    return res.render('index', { recipes })
-})
-
-server.get("/about", function (req, res) {
-    return res.render('about')
-})
-
-server.get("/recipes", function (req, res) {
-    return res.render('recipes', { recipes })
-})
-
-server.get("/recipes/:index", function (req, res) {
-    const recipeIndex = req.params.index
-    // console.log(recipeIndex)
-    
-    const recipe = recipes[recipeIndex]
-    // console.log(recipe)
-
-    // if (!recipes[recipeIndex]) {
-    //     return res.render('not-found')
-    // }
-    
-    return res.render("recipesDescription", { item: recipe })
-})
-
-server.use(function(req, res) {
-    return res.status(404).render("not-found");
-})
-
-// Assim de usa Params 
-// server.get("/recipes/:id", function (req, res) {
-//     res.send('Criando index' + req.params.id)
-// })
+module.exports = routes
