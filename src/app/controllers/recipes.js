@@ -1,4 +1,4 @@
-const Recipes = require('../models/Recipes')
+const Recipe = require('../models/Recipe')
 
 module.exports = {
     index(req, res) {
