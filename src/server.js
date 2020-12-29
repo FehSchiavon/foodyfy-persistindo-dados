@@ -4,7 +4,7 @@ const routes = require('./routes')
 const methodOverride = require('method-override')
 
 const server = express()
-const recipes = require("./dataOld")
+const recipes = require("../dataOld")
 
 server.use(express.urlencoded({ extended: true }))
 server.use(express.static('public'))
