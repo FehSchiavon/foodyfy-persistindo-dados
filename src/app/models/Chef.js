@@ -1,6 +1,8 @@
 const db = require('../../config/db')
 const { date } = require('../../lib/utils')
 
+// INIT 2021
+
 module.exports = {
     all(callback) {
         db.query(`
