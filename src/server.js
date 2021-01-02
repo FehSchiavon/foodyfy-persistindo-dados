@@ -4,7 +4,7 @@ const routes = require('./routes')
 const methodOverride = require('method-override')
 
 const server = express()
-const recipes = require("../dataOld")
+// const recipes = require("../dataOld")
 
 server.use(express.urlencoded({ extended: true }))
 server.use(express.static('public'))
@@ -13,12 +13,12 @@ server.use(routes)
 
 server.set("view engine", "njk")
 
-nunjucks.configure("views", {
+nunjucks.configure("src/app/views", {
     express: server,
     autoescape: false,
     noCache: true
 })
 
-server.listen(7777, function() {
-    console.log("server is running - Port:7777")
+server.listen(5000, function() {
+    console.log("server is running - Port:5000")
 })

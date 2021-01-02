@@ -4,7 +4,7 @@ const chefs = require('./app/controllers/chefs')
 const recipes = require('./app/controllers/recipes.js')
 
 routes.get('/', function(req, res) {
-    return res.redirect('/index')
+    return res.redirect('/chefs')
 })
 
 // RECIPES
