@@ -24,7 +24,6 @@ module.exports = {
             ) VALUES ($1, $2, $3)
             RETURNING id
         `
-
         const values = [
             data.name,
             data.avatar_url,
@@ -47,35 +46,27 @@ module.exports = {
     },
     findBy(filter, callback) {
         db.query(`
-        SELECT my_teacher.*, count(my_student) AS total_students 
-        FROM my_teacher 
-        LEFT JOIN my_student ON (my_student.teacher_id = my_teacher.id)
-        WHERE my_teacher.name ILIKE '%${filter}%'
-        OR my_teacher.education_level ILIKE '%${filter}%'
-        GROUP BY my_teacher.id
-        ORDER BY total_students DESC`, function(err, results) {
+        SELECT chefs.*, count(recipes) AS total_recipes 
+        FROM chefs 
+        LEFT JOIN recipes ON (recipes.chef_id = chefs.id)
+        WHERE chefs.name ILIKE '%${filter}%'
+        OR recipes.title ILIKE '%${filter}%'
+        GROUP BY chefs.id
+        ORDER BY total_recipes DESC`, function(err, results) {
             if(err) throw `Database Error! ${err}`
             callback(results.rows)
         })
     },
     update(data, callback) {
         const query = `
-            UPDATE my_teacher SET
-            avatar_url=($1),
-            name=($2),
-            birth_date=($3),
-            education_level=($4),
-            class_type=($5),
-            subjects_taught=($6)
-            WHERE id = ($7)
+            UPDATE chefs SET
+            name=($1),
+            avatar_url=($2),
+            WHERE id = ($3)
         `
         const values = [
-            data.avatar_url,
             data.name,
-            data.birth_date,
-            data.education_level,
-            data.class_type,
-            data.subjects_taught,
+            data.avatar_url,
             data.id
         ]
 
@@ -85,7 +76,7 @@ module.exports = {
         }) 
     },
     delete(id, callback) {
-        db.query(`DELETE FROM my_teacher WHERE id = $1`, [id], function(err, results) {
+        db.query(`DELETE FROM chefs WHERE id = $1`, [id], function(err, results) {
             if(err) throw `Database Error! ${err}`
             return callback()
         })
@@ -96,27 +87,27 @@ module.exports = {
         let query = "",
             filterQuery = "",
             totalQuery = `(
-                SELECT count(*) FROM my_teacher
+                SELECT count(*) FROM chefs
             ) AS total`
 
         if (filter) {
             filterQuery = `
-            WHERE my_teacher.name ILIKE '%${filter}%'
-            OR my_teacher.services ILIKE '%${filter}%'
+            WHERE chefs.name ILIKE '%${filter}%'
+            OR recipes.title ILIKE '%${filter}%'
             `
 
             totalQuery = `(
-                SELECT count(*) FROM my_teacher
+                SELECT count(*) FROM chefs
                 ${filterQuery}
             ) AS total`
         }
 
         query = `
-        SELECT my_teacher.*, ${totalQuery} , count(my_student) AS total_students 
-        FROM my_teacher
-        LEFT JOIN my_student ON (my_teacher.id = my_student.teacher_id)
+        SELECT chefs.*, ${totalQuery} , count(recipes) AS total_recipes 
+        FROM chefs
+        LEFT JOIN recipes ON (chefs.id = recipes.chef_id)
         ${filterQuery}
-        GROUP BY my_teacher.id LIMIT $1 OFFSET $2
+        GROUP BY chefs.id LIMIT $1 OFFSET $2
         `
 
         db.query(query, [limit, offset], function(err, results) {
