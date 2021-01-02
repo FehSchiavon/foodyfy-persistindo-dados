@@ -17,25 +17,17 @@ module.exports = {
     },
     create(data, callback) {
         const query = `
-            INSERT INTO my_teacher (
-                avatar_url,
+            INSERT INTO chefs (
                 name,
-                birth_date,
-                education_level,
-                class_type,
-                subjects_taught,
+                avatar_url,
                 created_at
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+            ) VALUES ($1, $2, $3)
             RETURNING id
         `
 
         const values = [
-            data.avatar_url,
             data.name,
-            date(data.birth_date).iso,
-            data.education_level,
-            data.class_type,
-            data.subjects_taught,
+            data.avatar_url,
             date(Date.now()).iso
         ]
 
@@ -46,7 +38,7 @@ module.exports = {
     },
     find(id, callback) {
         db.query(`SELECT *
-            FROM my_teacher
+            FROM chefs
             WHERE id = $1`, [id], function(err, results) {
                 if(err) throw `Database Error! ${err}`
                 callback(results.rows[0])
